@@ -16,10 +16,17 @@ using namespace std;
 
   int coin[MAX][3];
 
-int how(int sum,int u){
+int how(int sum,int u,int num){
   int mov=0;
-  mov=sum/u;
-
+  int n=0;
+  if(sum>=u){
+  do{
+  sum=sum-u;
+  ++mov;
+}while(num>mov&&sum>0);
+}else{
+  return 0;
+}
   return mov;
 }
 
@@ -31,11 +38,14 @@ int main(){
 cin>>x;
 
 cin>>a;
-cout<<how(x,500)<<endl;
+cout<<how(x,500,a)<<endl;
 cin>>b;
-cout<<how(x,100)<<endl;
+cout<<how(x,100,b)<<endl;
 cin>>c;
-cout<<how(x,50)<<endl;
+cout<<how(x,50,c)<<endl;
+
+
+
 
 
 
