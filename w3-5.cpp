@@ -118,9 +118,11 @@ public:
 int main()
 {
 
-  double lam=0.0;
+  double lam=1.0;
   std::priority_queue<Event> evPQ;
-  Server s1(1,2.0);
+	std::priority_queue<Event> weR;
+  Server s1(1,10.0);
+	Server s2(2,2.0);
 
    //仮のPerson，Server
    Person man[10000];//客一万人
@@ -156,11 +158,19 @@ int main()
    //cout<<curtime<<endl;
    man[i].setPersonProperty(i,curtime,1,0.0);
    double t=man[i].arrivalTime;
+	if(s1.Endtime<curtime){
    e[i].setEvent(i,t, EVENT_ARRIVAL, &man[i], &s1);
    evPQ.push(e[i]);
    J=man[i].arrivalTime+rnd_exp(s1.m);
    e[i].setEvent(i,J, EVENT_FINISH,&man[i], &s1);
    evPQ.push(e[i]);
+ }else{
+	 e[i].setEvent(i,t, EVENT_ARRIVAL, &man[i], &s2);
+   weR.push(e[i]);
+   J=man[i].arrivalTime+rnd_exp(s2.m);
+   e[i].setEvent(i,J, EVENT_FINISH,&man[i], &s2);
+   weR.push(e[i]);
+ }
 }
 
 Event curEvent;
@@ -174,23 +184,34 @@ int nowTime=0;
          curEvent = evPQ.top();
          evPQ.pop();
      }
-     else
+     else if(!weR.empty())
      {
+			 	curEvent = weR.top();
+			 	weR.pop();
 
-         break;
-     }
+     }else{
+			 break;
+		 }
 
      //イベントの種類で分岐
      switch (curEvent.evType)
      {
      case EVENT_ARRIVAL:
-         //cout<<"This event is ArrivalEvent eventID:"<<curEvent.eventID<<" at "curEvent.evTime<<endl;
+         cout<<"This event is ArrivalEvent manID:"<<curEvent.person->ID<<" at "<<curEvent.evTime<<endl;
+				 if(curEvent.server->serverID==1){
          s1.accPerson(curEvent.evTime,curEvent.person);
+			 }else{
+				  s2.accPerson(curEvent.evTime,curEvent.person);
+			 }
          break;
 
      case EVENT_FINISH:
-         //cout<<"This event is FinishEvent eventID:"<<curEvent.eventID<<" at "<<curEvent.evTime<<endl;
+         cout<<"This event is FinishEvent manID:"<<curEvent.person->ID<<" at "<<curEvent.evTime<<endl;
+				 if(curEvent.server->serverID==1){
          s1.release();//問題あり
+			 }else{
+				 s2.release();
+			 }
          break;
      }
  }

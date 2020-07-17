@@ -126,7 +126,7 @@ for(double s=1.0; s<=10.0; s++){
 
    //仮のPerson，Server
    Person man[10000];//客一万人
-   Event e[10000];
+   Event e[20000];
    double random = 0.0;
    int seed = 0;
    int A[10000];
@@ -185,7 +185,8 @@ int nowTime=0;
      switch (curEvent.evType)
      {
      case EVENT_ARRIVAL:
-         //cout<<"This event is ArrivalEvent eventID:"<<curEvent.eventID<<" at "curEvent.evTime<<endl;
+         //cout<<"This event is ArrivalEvent eventID:"<<curEvent.eventID<<" at "<<curEvent.evTime<<endl;
+				 //cout<<curEvent.person->ID<<endl;
          s1.accPerson(curEvent.evTime,curEvent.person);
          break;
 
